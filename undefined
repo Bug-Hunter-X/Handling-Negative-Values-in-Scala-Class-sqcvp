@@ -1,0 +1,30 @@
+```scala
+class MyClass(val name: String) {
+  private var _value: Int = 0
+
+  def value: Int = _value
+  def value_=(newValue: Int): Unit = {
+    if (newValue < 0) {
+      throw new IllegalArgumentException(s"Value cannot be negative.  Received: $newValue")
+    } else {
+      _value = newValue
+    }
+  }
+}
+
+// improved error handling, logging the exception:
+import org.slf4j.LoggerFactory
+
+object Main extends App {
+  val logger = LoggerFactory.getLogger(Main.getClass)
+  val obj = new MyClass("MyObject")
+  try {
+      obj.value = 10
+      println(obj.value) // Output: 10
+      obj.value = -5 // Throws IllegalArgumentException
+  } catch {
+    case e: IllegalArgumentException =>
+      logger.error("Error setting value: ", e)
+  }
+}
+```
